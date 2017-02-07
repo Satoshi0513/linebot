@@ -17,4 +17,15 @@ try{
 } catch(\LINE\LINEBot\Exception\InvalidEventRequestException $e) {
   error_log("parseEventRequest failed.InvalidEventRequestException => ".var_export($e,true));
 }
+foreach ($events as $event) {
+  if (!($event instanceof\LINE\LINEBot\Event\MessageEvent)) {
+    error_log('Non message event has come');
+    continue;
+  }
+  if (!($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage)) {
+    error_log('Non text message has come');
+    continue;
+  }
+  $bot->replyText($event->getReplyToken(),$event->getText());
+}
 ?>
