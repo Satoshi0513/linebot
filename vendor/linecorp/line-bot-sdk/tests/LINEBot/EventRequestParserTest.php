@@ -200,11 +200,13 @@ JSON;
             $this->assertEquals(12345678901234, $event->getTimestamp());
             $this->assertTrue($event->isUserEvent());
             $this->assertEquals('userid', $event->getUserId());
+            $this->assertEquals('userid', $event->getEventSourceId());
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent', $event);
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\TextMessage', $event);
             /** @var TextMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
             $this->assertEquals('contentid', $event->getMessageId());
+            $this->assertEquals('text', $event->getMessageType());
             $this->assertEquals('message', $event->getText());
         }
 
@@ -213,9 +215,11 @@ JSON;
             $event = $events[1];
             $this->assertTrue($event->isGroupEvent());
             $this->assertEquals('groupid', $event->getGroupId());
+            $this->assertEquals('groupid', $event->getEventSourceId());
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\ImageMessage', $event);
             /** @var ImageMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
+            $this->assertEquals('image', $event->getMessageType());
         }
 
         {
@@ -223,9 +227,11 @@ JSON;
             $event = $events[2];
             $this->assertTrue($event->isRoomEvent());
             $this->assertEquals('roomid', $event->getRoomId());
+            $this->assertEquals('roomid', $event->getEventSourceId());
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\VideoMessage', $event);
             /** @var VideoMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
+            $this->assertEquals('video', $event->getMessageType());
         }
 
         {
@@ -234,6 +240,7 @@ JSON;
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\AudioMessage', $event);
             /** @var AudioMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
+            $this->assertEquals('audio', $event->getMessageType());
         }
 
         {
@@ -242,6 +249,7 @@ JSON;
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\LocationMessage', $event);
             /** @var LocationMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
+            $this->assertEquals('location', $event->getMessageType());
             $this->assertEquals('label', $event->getTitle());
             $this->assertEquals('tokyo', $event->getAddress());
             $this->assertEquals('-34.12', $event->getLatitude());
@@ -254,6 +262,7 @@ JSON;
             $this->assertInstanceOf('LINE\LINEBot\Event\MessageEvent\StickerMessage', $event);
             /** @var StickerMessage $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
+            $this->assertEquals('sticker', $event->getMessageType());
             $this->assertEquals(1, $event->getPackageId());
             $this->assertEquals(2, $event->getStickerId());
         }
@@ -306,6 +315,7 @@ JSON;
             /** @var BeaconDetectionEvent $event */
             $this->assertEquals('replytoken', $event->getReplyToken());
             $this->assertEquals('bid', $event->getHwid());
+            $this->assertEquals('enter', $event->getBeaconEventType());
         }
     }
 }
