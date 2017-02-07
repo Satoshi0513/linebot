@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ .'/vender/autoload.php';
+require_once __DIR__ .'/vendor/autoload.php';
 
 $httpClient = new
 \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
