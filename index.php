@@ -26,6 +26,12 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
-  $bot->replyText($event->getReplyToken(),$event->getText());
+  $profile = $bot->getProfile($event->getUserId())->getJSONDecodedBody();
+  $message = $profile["displayName"]."さん、おはようございます！今日も頑張りましょう！";
+  $bot->replyMessage($event->getReplyToken(),
+  (new\LINE\LINEBot\MessageBuilder\MultiMessageBuilder())
+  ->add(new\LINE\LINEBot\MessageBuilder\TextMessageBuilder($message))
+  ->add(new\LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1,114))
+);
 }
 ?>
