@@ -48,7 +48,7 @@ $columnArray = array();
       \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
       ($i + 1)."日後の天気",
       "晴れ",
-      "http://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
+      "https://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
       $actionArray
     );
     array_push($columnArray,$column);
