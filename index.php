@@ -41,9 +41,7 @@ replyConfirmTemplate(
   new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
   "見る","http://google.jp"),
   new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-  "見ない","ignore"),
-  new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-  "非表示","never")
+  "見ない","ignore")
 );
 }
 
