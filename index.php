@@ -41,7 +41,7 @@ $columnArray = array();
       array_push($actionArray,new
     LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
       "ボタン" . $i . "-" . 2,"c-" . $i . "-" . 2));
-      array_push($actionArray,new 
+      array_push($actionArray,new
     LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
       "ボタン" . $i . "-" . 3,"c-" . $i . "-" . 3));
       $column = new
@@ -141,7 +141,7 @@ function replyCarouselTemplate($bot,$replyToken,$alternativeText,$columnArray) {
   $columnArray)
   );
   $response = $bot->replyMessage($replyToken,$builder);
-  if(!$responce->isSucceeded()) {
+  if(!$response->isSucceeded()) {
     error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
   }
 }
