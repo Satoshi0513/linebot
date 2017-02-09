@@ -31,10 +31,10 @@ replyTextMessage($bot,$event->getReplyToken(),"TextMessage");
 }
 
 function replyTextMessage($bot,$replyToken,$text) {
-  $responce = $bot->replyMessage($replyToken,new
+  $response = $bot->replyMessage($replyToken,new
   \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text));
-  if(!$responce->isSucceeded()) {
-    error_log('Failed!'.$responce->getHTTPStatus.'.$responce->getRawBody());
+  if(!$response->isSucceeded()) {
+    error_log('Failed!'.$response->getHTTPStatus.''.$responce->getRawBody());
   }
 }
 ?>
