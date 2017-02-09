@@ -27,8 +27,7 @@ foreach ($events as $event) {
     continue;
   }
 
-  replyLocationMessage($bot,$event->getReplyToken(),"LINE","東京都渋谷区渋谷2-21-1
-   ヒカリエ27階", 35.659025, 139.703473);
+  replyStickerMessage($bot,$event->getReplyToken(),1,1);
 }
 
 
@@ -53,6 +52,14 @@ function replyLocationMessage($bot,$replyToken,$title,$address,$lat,$lon) {
   \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title,$address,$lat,$lon));
   if (!$response->isSucceeded()) {
     error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
+  }
+}
+
+function replyStickerMessage($bot,$replyToken,$packageId,$stickerId) {
+  $response = $bot->replyMessage($replyToken,new
+  \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($packageId,$stickerId));
+  if (!$response->isSucceeded()) {
+    error_log('Failed!'.$response->getHTTPStatus.''$response->getRawBody());
   }
 }
 ?>
