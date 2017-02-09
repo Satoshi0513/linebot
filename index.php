@@ -26,9 +26,10 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
+  replyImageMessage($bot,$event->getReplyToken(),"https://".$_SERVER["HTTP_HOST"].
+  "/imgs/original.jpg","https://".$_SERVER["HTTP_HOST"]."/imgs/preview.jpg");
 }
-replyImageMessage($bot,$event->getReplyToken(),"https://".$_SERVER["HTTP_HOST"].
-"/imgs/original.jpg","https://".$_SERVER["HTTP_HOST"]."/imgs/preview.jpg");
+
 
 function replyTextMessage($bot,$replyToken,$text) {
   $response = $bot->replyMessage($replyToken,new
