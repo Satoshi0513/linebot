@@ -28,7 +28,7 @@ foreach ($events as $event) {
   }
 
   replyLocationMessage($bot,$event->getReplyToken(),"LINE","東京都渋谷区渋谷2-21-1
-   ヒカリエ27階", 35.659025, 139.703473);)
+   ヒカリエ27階", 35.659025, 139.703473);
 }
 
 
