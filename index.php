@@ -48,7 +48,7 @@ function replyImageMessage($bot,$replyToken,$originalImageUrl,$previewImageUrl) 
   }
 }
 
-fuction replyLocationMessage($bot,$replyToken,$title,$address,$lat,$lon) {
+function replyLocationMessage($bot,$replyToken,$title,$address,$lat,$lon) {
   $response = $bot->replyMessage($replyToken,new
   \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title,$address,$lat,$lon));
   if (!$response->isSucceeded()) {
