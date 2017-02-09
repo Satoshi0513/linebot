@@ -27,14 +27,19 @@ foreach ($events as $event) {
     continue;
   }
 
-  replyMultiMessage($bot,$event->getReplyToken(),
-  new\LINE\LINEBot\MessageBuilder\TextMessageBuilder("TextMessage"),
-  new\LINE\LINEBot\MessageBuilder\ImageMessageBuilder("https://".
-  $_SERVER["HTTP_HOST"]."/imgs/original.jpg","https://".$_SERVER["HTTP_HOST"].
-  "/imgs/preview.jpg"),
-  new\LINE\LINEBot\MessageBuilder\LocationMessageBuilder("LINE","東京都渋谷区渋谷
-  2-21-1 ヒカリエ27階", 35.659025, 139.703473),
-  new\LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1,1)
+replyButtonsTemplate(
+  $bot,
+  $event->getReplyToken(),
+  "お天気お知らせ - 今日の天気予報は晴れです",
+  "https://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
+  "お天気お知らせ ",
+  "今日の天気予報は晴れです",
+  new\LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+  "明日の天気","tomorrow"),
+  new\LINE\LINEBot\TemplateActionBuilder\PostbackTemplateBuilder(
+  "週末の天気","weekend"),
+  new\LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
+  "Webで見る","http://google.jp")
 );
 }
 
@@ -79,6 +84,23 @@ function replyMultiMessage($bot,$replyToken,...$msgs) {
   $response = $bot->replyMessage($replyToken,$builder);
   if (!$response->isSucceeded()) {
     error_log('Failed'.$response->getHTTPStatus.''.$response->getRawBody());
+  }
+}
+
+function replyButtonsTemplate($bot,$replyToken,$alternativeText,$imageUrl,
+$title,$text,...$actions) {
+  $actionArray = array();
+  foreach($actions as $value) {
+    array_push($actionArray,$value);
+  }
+  $builder = new\LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+  $alternativeText,
+  new\LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder($title,
+  $text,$imageUrl,$actionArray)
+);
+  $response = $bot->replyMessage($replyToken,$builder);
+  if(!$response->isSucceeded()) {
+  error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
   }
 }
 ?>
