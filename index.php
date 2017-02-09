@@ -23,7 +23,7 @@ foreach ($events as $event) {
     getPostbackData()."」");
     continue;
   }
-  
+
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent)) {
     error_log('Non message event has come');
     continue;
@@ -33,19 +33,17 @@ foreach ($events as $event) {
     continue;
   }
 
-replyButtonsTemplate(
+replyConfirmTemplate(
   $bot,
   $event->getReplyToken(),
-  "お天気お知らせ - 今日の天気予報は晴れです",
-  "https://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
-  "お天気お知らせ ",
-  "今日の天気予報は晴れです",
-  new\LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-  "明日の天気","tomorrow"),
-  new\LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder(
-  "週末の天気","weekend"),
+  "Webで詳しくみますか？",
+  "Webで詳しくみますか？",
   new\LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
-  "Webで見る","http://google.jp")
+  "見る","http://google.jp"),
+  new\LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+  "見ない","ignore"),
+  new\LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+  "非表示","never")
 );
 }
 
@@ -108,5 +106,21 @@ $title,$text,...$actions) {
   if(!$response->isSucceeded()) {
   error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
   }
+}
+
+function replyConfirmTemplate($bot,$replyToken,$alternativeText,$text,...$actions) {
+  $actionArray = array();
+  foreach($actions as $value) {
+    array_push($actionArray,$value);
+  }
+$builder = new\LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+  $alternativeText,
+  new\LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder($text,
+  $actionArray)
+);
+$response = $bot->replyMessage($replyToken,$builder);
+if (!$response->isSucceeded()) {
+  error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
+}
 }
 ?>
