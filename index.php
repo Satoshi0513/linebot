@@ -39,9 +39,9 @@ function replyTextMessage($bot,$replyToken,$text) {
   }
 }
 
-function replyImageMessage($bot,$replyToken,$originallimageUrl,$previewImageUrl) {
+function replyImageMessage($bot,$replyToken,$originalImageUrl,$previewImageUrl) {
   $response = $bot->replyMessage($replyToken,new
-  \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originallImageUrl,$previewImageUrl));
+  \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originalImageUrl,$previewImageUrl));
   if (!$response->isSucceeded()) {
     error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
   }
