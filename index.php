@@ -23,6 +23,7 @@ foreach ($events as $event) {
     getPostbackData()."」");
     continue;
   }
+  
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent)) {
     error_log('Non message event has come');
     continue;
