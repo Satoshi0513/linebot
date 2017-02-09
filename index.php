@@ -32,17 +32,28 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
+$columnArray = array();
+  for($i = 0;$i < 5;$i++) {
+    $actionArray = array();
+    array_push($actionArray,new
+    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+      "ボタン" .$i. "-" .1,"c-" .$i. "-" .1));
+    array_push($actionArray,new
+    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+      "ボタン" .$i. "-" .2,"c-" .$i. "-" .2));
+    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
+      "ボタン" .$i. "-" .3,"c-" .$i. "-" .3));
+      $column = new
+      \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
+      ($i + 1)."日後の天気",
+      "晴れ",
+      "http://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
+      $actionArray
+    );
+    array_push($columnArray,$column);
+  }
 
-replyConfirmTemplate(
-  $bot,
-  $event->getReplyToken(),
-  "Webで詳しくみますか？",
-  "Webで詳しくみますか？",
-  new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
-  "見る","http://google.jp"),
-  new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-  "見ない","ignore")
-);
+replyCarouselTemplate($bot,$event->getReplyToken(),"今後の天気予報",$columnArray);
 }
 
 
@@ -111,14 +122,26 @@ function replyConfirmTemplate($bot,$replyToken,$alternativeText,$text,...$action
   foreach($actions as $value) {
     array_push($actionArray,$value);
   }
-$builder = new\LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
-  $alternativeText,
-  new\LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder($text,
-  $actionArray)
-);
-$response = $bot->replyMessage($replyToken,$builder);
-if (!$response->isSucceeded()) {
+  $builder = new\LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+    $alternativeText,
+    new\LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder($text,
+    $actionArray)
+  );
+  $response = $bot->replyMessage($replyToken,$builder);
+  if (!$response->isSucceeded()) {
   error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
+  }
 }
+
+function replyCarouselTemplate($bot,$replyToken,$alternativeText,$columnArray) {
+  $builder = new\LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+  $alternativeText,
+  new\LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder(
+  $columnArray)
+  );
+  $response = $bot->replyMessage($replyToken,$builder);
+  if(!$responce->isSucceeded()) {
+    error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
+  }
 }
 ?>
