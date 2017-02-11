@@ -32,6 +32,7 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
+}
 $columnArray = array();
   for($i = 0;$i < 5;$i++) {
       $actionArray = array();
@@ -55,7 +56,6 @@ $columnArray = array();
   }
 
 replyCarouselTemplate($bot,$event->getReplyToken(),"今後の天気予報",$columnArray);
-}
 
 
 function replyTextMessage($bot,$replyToken,$text) {
