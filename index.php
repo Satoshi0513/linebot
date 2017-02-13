@@ -33,6 +33,7 @@ foreach ($events as $event) {
     continue;
   }
 }
+
 $columnArray = array();
   for($i = 0;$i < 5;$i++) {
       $actionArray = array();
