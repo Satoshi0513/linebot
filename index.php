@@ -43,7 +43,7 @@ if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
 
 if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
   $googleapi = new Googleapi;
-  $latlon = $googleapi->build($event->getText());
+  $latlon = $googleapi->get($event->getText());
   $gnaviapi = new Gnaviapi;
   $json = $gnaviapi->get($latlon[0],$latlon[1]);
   continue;
