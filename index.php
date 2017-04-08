@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ .'/vendor/autoload.php';
+require_once(dirname(__FILE__)."/vendor/autoload.php");
+require_once(dirname(__FILE__)."/googleapi.php");
+require_once(dirname(__FILE__)."/gnaviapi.php");
 
 $httpClient = new
 \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
@@ -32,32 +34,50 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
+
+if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
+  $gnaviapi = new Gnaviapi;
+  $json = $gnaviapi->get($event->getLatitude(),$event->getLongitude());
+  continue;
 }
 
+if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
+  $googleapi = new Googleapi;
+  $latlon = $googleapi->build($event->getText());
+  $gnaviapi = new Gnaviapi;
+  $json = $gnaviapi->get($latlon[0],$latlon[1]);
+  continue;
+}
+}
+
+
 $columnArray = array();
-  for($i = 0;$i < 5;$i++) {
+$i = 0;
+  foreach($json->rest as $rest) {
       $actionArray = array();
       array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "ボタン" . $i . "-" . 1,"c-" . $i . "-" . 1));
+    LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
+      "店舗URL",$rest->url_mobile));
       array_push($actionArray,new
     LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "ボタン" . $i . "-" . 2,"c-" . $i . "-" . 2));
+      "営業時間" ,$i . "-opentime-holiday"));
       array_push($actionArray,new
     LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "ボタン" . $i . "-" . 3,"c-" . $i . "-" . 3));
+      "地図URL",$i . "-latitude-longitude"));
       $column = new
       \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
-      ($i + 1)."日後の天気",
-      "晴れ",
-      "https://".$_SERVER["HTTP_HOST"]."/imgs/template.jpg",
+      ($i+1)."番目に近い店舗",
+      $rest->name,
+      $rest->imageurl->shop_image1,
       $actionArray
     );
     array_push($columnArray,$column);
+    $i += 1;
   }
 
 replyCarouselTemplate($bot,$event->getReplyToken(),"今後の天気予報",$columnArray);
 
+//Function for generating replyMessage
 
 function replyTextMessage($bot,$replyToken,$text) {
   $response = $bot->replyMessage($replyToken,new
@@ -146,4 +166,5 @@ function replyCarouselTemplate($bot,$replyToken,$alternativeText,$columnArray) {
     error_log('Failed!'.$response->getHTTPStatus.''.$response->getRawBody());
   }
 }
+
 ?>

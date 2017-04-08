@@ -1,43 +1,52 @@
 <?php
 class Googleapi {
 	//Web API URI
-	 const APIURI = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
-
+	public function __construct(){
+	define('TEXTAPI','https://maps.googleapis.com/maps/api/place/textsearch/json');
 	//API Key
-	private $apikey = getenv('API_KEY');
-
-
-//Build URI for Google Place API
-public function build($userMessage){
-	$uri = self::APIURI.'?query=' . $userMessage . '&key=' . $this->$apikey .
-	 '&radius=1000&language=ja';
-
-	 return $uri;
+	$this->apikey = getenv('GOOGLE_API_KEY');
 }
+//Build URI for Google Place API
+private function _build($usermessage){
+	$latlng = array();
+	$usermessage = urlencode($usermessage);
+	$uri = TEXTAPI .'?query=' . $usermessage . '&key=' . $this->apikey;
+
+	return $uri;
+ }
 
 
 //Get JSON data
-public function get($uri) {
+public function get($usermessage) {
+
 			// Get Request limited for 5 seconds
 			$opts = array('http'=>
 									array('timeout'=>5)
 									);
 			$context = stream_context_create($opts);
 			//Send request to Google Place API
-			$json = file_get_contents($uri,0,$context);
+			$json = file_get_contents($this->_build($usermessage),0,$context);
 			//Check request if failed
 			if ($json===FALSE) {
-				throw new Exception ('Access Error',0);
+				throw new Exception ('Access Error',1);
 			}
 
 			//Transform to JSON object
 			$ret = json_decode($json);
 
 			//Check API Request if failed
-			if(isset($json->Error)) {
-				throw new Exception('YahooApi Error:'.$json->error_message);
+			if(isset($json->error_message)) {
+				throw new Exception('GoogleApi Error:'.$json->error_message);
 			}
-			return $ret;
+
+			$latlng = array();
+			array_push($latlng,$ret->results[0]->geometry->location->lat);
+			array_push($latlng,$ret->results[0]->geometry->location->lng);
+
+			return $latlng;
 		}
 
 }
+$api = new Googleapi;
+$json = $api->get('神保原駅');
+var_dump($json);
