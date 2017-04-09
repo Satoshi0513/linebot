@@ -35,18 +35,15 @@ foreach ($events as $event) {
     continue;
   }
 //check message type Locationinfo or Textmessage
-if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
-  $gnaviapi = new Gnaviapi;
-  $json = $gnaviapi->get($event->getLatitude(),$event->getLongitude());
 }
 
-if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
+
   $googleapi = new Googleapi;
   $latlon = $googleapi->get($event->getText());
   $gnaviapi = new Gnaviapi;
   $json = $gnaviapi->get($latlon[0],$latlon[1]);
-}
-}
+
+
 
 var_dump($json);
 $columnArray = array();
