@@ -23,9 +23,9 @@ class Gnaviapi {
   try{
     $json = file_get_contents($this->_build($lat,$lng),0,$context);
 
-    throw new Exception('Access Erorr',0);
+    throw new Exception('Access Erorr gnavi',0);
   } catch (Exception $e){
-    error_log($e->getMessage());
+    echo($e->getMessage());
   }
   //Web APIから取得したXMLデータをオブジェクトに代入
     $ret = json_decode($json);
@@ -37,7 +37,7 @@ try{
   throw new Exception('Gnaviapi Error',(int) $ret->error->code);
 }
 } catch(Exception $e){
-  error_log('Gnaviapi Resopnce Error:'.$ret->error->message);
+  echo('Gnaviapi Resopnce Error:'.$ret->error->message);
 }
 
 

@@ -28,7 +28,7 @@ public function get($usermessage) {
 			$json = file_get_contents($this->_build($usermessage),0,$context);
 			//Check request if failed
 			if ($json===FALSE) {
-				throw new Exception ('Access Error',1);
+				throw new Exception ('Access Error google',1);
 			}
 
 			//Transform to JSON object
