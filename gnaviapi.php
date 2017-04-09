@@ -25,7 +25,7 @@ class Gnaviapi {
 
     throw new Exception('Access Erorr gnavi',0);
   } catch (Exception $e){
-    echo($e->getMessage());
+    error_log($e->getMessage());
   }
   //Web APIから取得したXMLデータをオブジェクトに代入
     $ret = json_decode($json);
@@ -37,7 +37,7 @@ try{
   throw new Exception('Gnaviapi Error',(int) $ret->error->code);
 }
 } catch(Exception $e){
-  echo('Gnaviapi Resopnce Error:'.$ret->error->message);
+  error_log('Gnaviapi Resopnce Error:'.$ret->error->message);
 }
 
 
