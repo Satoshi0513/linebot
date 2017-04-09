@@ -45,3 +45,8 @@ return $ret;
 
   }
 }
+
+putenv("GNAVI_API_KEY=3502416fd931ec2db08b7358234398c5");
+$api = new Gnaviapi;
+$json = $api->get(36.253464,139.149407);
+var_dump($json);

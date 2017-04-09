@@ -47,6 +47,8 @@ public function get($usermessage) {
 		}
 
 }
+
+putenv("GOOGLE_API_KEY=AIzaSyAIdcpEhhl7JvxZPH1J3QbbY3H803o6MJc");
 $api = new Googleapi;
 $json = $api->get('神保原駅');
 var_dump($json);
