@@ -48,6 +48,7 @@ if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
 }
 }
 
+var_dump($json);
 $columnArray = array();
 $i = 0;
   foreach($json->rest as $rest) {
