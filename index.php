@@ -34,7 +34,6 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
-}
 //check message type Locationinfo or Textmessage
 if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
   $gnaviapi = new Gnaviapi;
@@ -48,8 +47,7 @@ if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
   $gnaviapi = new Gnaviapi;
   $json = $gnaviapi->get($latlon[0],$latlon[1]);
 }
-
-
+}
 
 $columnArray = array();
 $i = 0;
