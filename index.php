@@ -54,32 +54,7 @@ if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
 var_dump($json);
 $columnArray = array();
 $i = 0;
-  foreach($json->rest as $rest) {
-    if($i>=4){
-      break;
-    }
-      $actionArray = array();
-      array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
-      "店舗URL",$rest->url_mobile));
-      array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "営業時間" ,$i . "-opentime-holiday"));
-      array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "地図URL",$i . "-latitude-longitude"));
-      $column = new
-      \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
-      ($i+1)."番目に近い店舗",
-      $rest->name,
-      $rest->imageurl->shop_image1,
-      $actionArray
-    );
-    array_push($columnArray,$column);
-    $i += 1;
-  }
-
-replyCarouselTemplate($bot,$event->getReplyToken(),"今後の天気予報",$columnArray);
+  
 
 //Function for generating replyMessage
 
