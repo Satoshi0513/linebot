@@ -1,9 +1,9 @@
 <?php
 class Gnaviapi {
 
-  public function __construct(){
+  public function __construct($apikey){
   define('APIURI','https://api.gnavi.co.jp/RestSearchAPI/20150630/?format=json');
-  $this->apikey = getenv('GNAVI_API_KEY');
+  $this->apikey = $apikey;
 }
 
   private function _build($lat,$lng) {

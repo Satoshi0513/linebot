@@ -1,10 +1,10 @@
 <?php
 class Googleapi {
 	//Web API URI
-	public function __construct(){
+	public function __construct($apikey){
 	define('TEXTAPI','https://maps.googleapis.com/maps/api/place/textsearch/json');
 	//API Key
-	$this->apikey = getenv('GOOGLE_API_KEY');
+	$this->apikey = $apikey;
 }
 //Build URI for Google Place API
 private function _build($usermessage){
