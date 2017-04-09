@@ -1,12 +1,14 @@
 <?php
 require_once(dirname(__FILE__)."/vendor/autoload.php");
+var_dump('a');
 require_once(dirname(__FILE__)."/googleapi.php");
+var_dump('b');
 require_once(dirname(__FILE__)."/gnaviapi.php");
-
+var_dump('c');
 $httpClient = new
 \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 $bot = new\LINE\LINEBot($httpClient,['channelSecret' => getenv('CHANNEL_SECRET')]);
-
+var_dump('d');
 $signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
 try{
   $events = $bot->parseEventRequest(file_get_contents('php://input'),$signature);
@@ -19,23 +21,25 @@ try{
 } catch(\LINE\LINEBot\Exception\InvalidEventRequestException $e) {
   error_log("parseEventRequest failed.InvalidEventRequestException => ".var_export($e,true));
 }
+var_dump('e');
 foreach ($events as $event) {
   if ($event instanceof\LINE\LINEBot\Event\PostbackEvent) {
     replyTextMessage($bot,$event->getReplyToken(),"Postback受信「".$event->
     getPostbackData()."」");
     continue;
   }
-
+var_dump('f');
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent)) {
     error_log('Non message event has come');
     continue;
   }
+  var_dump('g');
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage)) {
     error_log('Non text message has come');
     continue;
   }
 //check message type Locationinfo or Textmessage
-
+var_dump('h');
 
 if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
   $gnaviapi = new Gnaviapi(getenv('GNAVI_API_KEY'));
