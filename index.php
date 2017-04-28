@@ -30,7 +30,7 @@ foreach ($events as $event) {
     error_log('Non message event has come');
     continue;
   }
-  var_dump('g');
+
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage)) {
     error_log('Non text message has come');
     continue;
@@ -47,7 +47,7 @@ $url = $api->nearbyapiBuild($lat,$lng);
 $stores = $api->get($url);
 $columnArray = array();
 $i = 0;
-var_dump($stores);
+error_log(var_dump($stores));
 foreach($stores->results as $rest){
 
       $actionArray = array();
@@ -65,7 +65,6 @@ foreach($stores->results as $rest){
     array_push($columnArray,$column);
     $i += 1;
   }
-  
 replyCarouselTemplate($bot,$event->getReplyToken(),"近くのカフェ",$columnArray);
 }
 //Function for generating replyMessage
