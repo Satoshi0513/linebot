@@ -1,14 +1,11 @@
 <?php
 require_once(dirname(__FILE__)."/vendor/autoload.php");
-var_dump('a');
 require_once(dirname(__FILE__)."/googleapi.php");
-var_dump('b');
-require_once(dirname(__FILE__)."/gnaviapi.php");
-var_dump('c');
+
 $httpClient = new
 \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 $bot = new\LINE\LINEBot($httpClient,['channelSecret' => getenv('CHANNEL_SECRET')]);
-var_dump('d');
+
 $signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
 try{
   $events = $bot->parseEventRequest(file_get_contents('php://input'),$signature);
@@ -21,14 +18,14 @@ try{
 } catch(\LINE\LINEBot\Exception\InvalidEventRequestException $e) {
   error_log("parseEventRequest failed.InvalidEventRequestException => ".var_export($e,true));
 }
-var_dump('e');
+
 foreach ($events as $event) {
   if ($event instanceof\LINE\LINEBot\Event\PostbackEvent) {
     replyTextMessage($bot,$event->getReplyToken(),"Postback受信「".$event->
     getPostbackData()."」");
     continue;
   }
-var_dump('f');
+
   if (!($event instanceof\LINE\LINEBot\Event\MessageEvent)) {
     error_log('Non message event has come');
     continue;
@@ -38,46 +35,31 @@ var_dump('f');
     error_log('Non text message has come');
     continue;
   }
+}
 //check message type Locationinfo or Textmessage
-var_dump('h');
 
-if ($event instanceof\LINE\LINEBot\Event\MessageEvent\LocationMessage){
-  $gnaviapi = new Gnaviapi(getenv('GNAVI_API_KEY'));
-  $json = $gnaviapi->get($event->getLatitude(),$event->getLongitude());
-}
-
-if ($event instanceof\LINE\LINEBot\Event\MessageEvent\TextMessage){
-  $googleapi = new Googleapi(getenv('GOOGLE_API_KEY'));
-  $latlon = $googleapi->get($event->getText());
-  $gnaviapi = new Gnaviapi(getenv('GNAVI_API_KEY'));
-  $json = $gnaviapi->get($latlon[0],$latlon[1]);
-}
-}
-
-
-var_dump($json);
+$api = new Googleapi(getenv("GOOGLE_API_KEY"));
+$uri = $api->textapiBuild($event->getText());
+$json = $api->get($uri);
+$lat = $json->results[0]->geometry->location->lat;
+$lng = $json->results[0]->geometry->location->lng;
+$url = $api->nearbyapiBuild($lat,$lng);
+$stores = $api->get($url);
 $columnArray = array();
 $i = 0;
 
-foreach($json->rest as $rest) {
-    if($i>=4){
-      break;
-    }
+foreach($stores->results as $rest){
+
       $actionArray = array();
       array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
-      "店舗URL",$rest->url_mobile));
-      array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "営業時間" ,$i . "-opentime-holiday"));
-      array_push($actionArray,new
-    LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder(
-      "地図URL",$i . "-latitude-longitude"));
+      LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder(
+      "地図","https://www.google.co.jp/maps/@" . $rest->geometry->location->lat . "," . $rest->geometry->location->lng));
+
       $column = new
       \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
       ($i+1)."番目に近い店舗",
       $rest->name,
-      $rest->imageurl->shop_image1,
+      $photoapiBuild($rest->photos->photo_reference,$rest->photos->width),
       $actionArray
     );
     array_push($columnArray,$column);
