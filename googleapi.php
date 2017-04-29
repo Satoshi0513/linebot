@@ -43,7 +43,12 @@ public function photoapiBuild($reference,$maxwidth){
 	$width = "maxwidth=" . $maxwidth;
 	array_push($params,$photoref,$width);
 	$uri = $this->_build($params,PHOTOAPI);
+	try{
 	$photo = file_get_contents($uri);
+	throw new Exception('Access error for google place photo',2);
+} catch (Exception $e){
+	error_log("Cannot get photo data");
+}
 	return $photo;
 }
 
