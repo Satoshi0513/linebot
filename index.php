@@ -63,7 +63,7 @@ foreach($stores->results as $rest){
       \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder(
       ($i+1)."番目に近い店舗",
       $rest->name,
-      $api->photoapiBuild($rest->photos[0]->photo_reference,$rest->photos[0]->width),
+      $api->photoapiBuild($rest->name,$rest->name),
       $actionArray
     );
     array_push($columnArray,$column);
