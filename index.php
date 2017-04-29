@@ -45,7 +45,7 @@ $lat = $json->results[0]->geometry->location->lat;
 $lng = $json->results[0]->geometry->location->lng;
 $url = $api->nearbyapiBuild($lat,$lng);
 $stores = $api->get($url);
-
+error_log($stores);
 $columnArray = array();
 $i = 0;
 foreach($stores->results as $rest){
