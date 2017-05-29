@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/googleapi.php';
 
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
@@ -31,58 +32,18 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
-  //$bot->replyText($event->getReplyToken(), $event->getText());
-  /*
-  $profile = $bot->getProfile($event->getUserId())->getJSONDecodedBody();
-  $message = $profile["displayName"] . "さん、おはようございます！今日も頑張りましょう！";
-  $bot->replyMessage($event->getReplyToken(),
-    (new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder())
-      ->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message))
-      ->add(new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 114))
-  );*/
-  //replyTextMessage($bot, $event->getReplyToken(), "TextMessage");
-  //replyImageMessage($bot, $event->getReplyToken(), "https://" . $_SERVER["HTTP_HOST"] . "/imgs/original.jpg", "https://" . $_SERVER["HTTP_HOST"] . "/imgs/preview.jpg");
-  //replyLocationMessage($bot, $event->getReplyToken(), "LINE", "東京都渋谷区渋谷2-21-1 ヒカリエ27階", 35.659025, 139.703473);
-  //replyStickerMessage($bot, $event->getReplyToken(), 1, 1);
-  /*
-  replyMultiMessage($bot, $event->getReplyToken(),
-    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("TextMessage"),
-    new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder("https://" . $_SERVER["HTTP_HOST"] . "/imgs/original.jpg", "https://" . $_SERVER["HTTP_HOST"] . "/imgs/preview.jpg"),
-    new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder("LINE", "東京都渋谷区渋谷2-21-1 ヒカリエ27階", 35.659025, 139.703473),
-    new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 1)
-  );
-  */
-  /*
-  replyButtonsTemplate($bot,
-    $event->getReplyToken(),
-    "お天気お知らせ - 今日は天気予報は晴れです",
-    "https://" . $_SERVER["HTTP_HOST"] . "/imgs/template.jpg",
-    "お天気お知らせ",
-    "今日は天気予報は晴れです",
-    new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "明日の天気", "tomorrow"),
-    new LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder (
-      "週末の天気", "weekend"),
-    new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-      "Webで見る", "http://google.jp")
-    );
-  */
-  /*
-  replyConfirmTemplate($bot,
-    $event->getReplyToken(),
-    "Webで詳しく見ますか？",
-    "Webで詳しく見ますか？",
-    new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-      "見る", "http://google.jp"),
-    new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "見ない", "ignore"),
-    new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "非表示", "never")
-    );
-  */
-  
+
+  if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
+    $api = new Googleapi(getenv('GOOGLE_API_KEY'));
+
+  }
+
+  if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
+    $api = new Googleapi(getenv('GOOGLE_API_KEY'));
+  }
+
   $columnArray = array();
-  for($i = 0; $i < 5; $i++) {
+  for($i = 0; $i < 3; $i++) {
     $actionArray = array();
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
       "ボタン" . $i . "-" . 1, "c-" . $i . "-" . 1));
