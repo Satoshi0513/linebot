@@ -56,7 +56,7 @@ foreach ($events as $event) {
     $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
       ($i + 1) . "番目に近いカフェ",
       $res->name,
-      $api->photoApi($res[$i]->photos[$i]->photo_reference,$res[$i]->photos[$i]->width),
+      $api->photoApi($res->photos[$i]->photo_reference,$res->photos[$i]->width),
       $actionArray
     );
     array_push($columnArray, $column);
