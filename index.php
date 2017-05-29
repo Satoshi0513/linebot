@@ -35,29 +35,32 @@ foreach ($events as $event) {
 
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
-
+    $json = $api->textApi($bot->getText());
   }
 
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
+    $json = $api->nearbyApi($bot->getLatitude(),$bot->getLongitude());
   }
 
   $columnArray = array();
-  for($i = 0; $i < 3; $i++) {
+  $i = 0;
+  foreach($json->results as $res) {
     $actionArray = array();
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "ボタン" . $i . "-" . 1, "c-" . $i . "-" . 1));
+      "Webサイト", "c-" . $i . "-" . 1));
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "ボタン" . $i . "-" . 2, "c-" . $i . "-" . 2));
+      "地図", "c-" . $i . "-" . 2));
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "ボタン" . $i . "-" . 3, "c-" . $i . "-" . 3));
+      "営業時間", "c-" . $i . "-" . 3));
     $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-      ($i + 1) . "日後の天気",
-      "晴れ",
-      "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/template.jpg",
+      ($i + 1) . "番目に近いカフェ",
+      $res->name,
+      $api->photoApi($res->photos->photo_reference,$res->photos->width),
       $actionArray
     );
     array_push($columnArray, $column);
+    $i += 1;
   }
   replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
 
