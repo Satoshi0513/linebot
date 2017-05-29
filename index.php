@@ -35,12 +35,12 @@ foreach ($events as $event) {
 
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
-    $json = $api->textApi($bot->getText());
+    $json = $api->textApi($event->getText());
   }
 
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
-    $json = $api->nearbyApi($bot->getLatitude(),$bot->getLongitude());
+    $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
   }
 
   $columnArray = array();
