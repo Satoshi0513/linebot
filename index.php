@@ -32,21 +32,36 @@ foreach ($events as $event) {
     error_log('Non text message has come');
     continue;
   }
-
+//check if usertext come
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
     $json = $api->textApi($event->getText());
   }
-
+//check if location message come
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
     $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
   }
 
+
   $columnArray = array();
   $i = 0;
+
   foreach($json->results as $res) {
     $actionArray = array();
+    //variables to get place photo
+    $ref = $res->photos[0];
+    $width = $res->photos[0]->width;
+    //get place photo data if exists
+    if (isset($ref)&&isset($width){
+      $photo = $api->photoApi($ref,$width);
+    }else{
+      //if no photo, put cafe icon insteadly
+      $uri =$res->icon;
+      $photo = file_get_contents($uri);
+    }
+
+    //prepare for creating carousel
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
       "Webサイト", "c-" . $i . "-" . 1));
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
@@ -56,7 +71,7 @@ foreach ($events as $event) {
     $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
       ($i + 1) . "番目に近いカフェ",
       $res->name,
-      $api->photoApi($res->photos[$i]->photo_reference,$res->photos[$i]->width),
+      $photo,
       $actionArray
     );
     array_push($columnArray, $column);
@@ -66,6 +81,8 @@ foreach ($events as $event) {
 
 }
 
+
+//function to generate message template
 function replyTextMessage($bot, $replyToken, $text) {
   $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text));
   if (!$response->isSucceeded()) {
