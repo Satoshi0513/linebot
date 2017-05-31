@@ -54,15 +54,15 @@ public function photoApi($reference,$maxwidth){
 	$width = "maxwidth=" . $maxwidth;
 	array_push($params,$photoref,$width,$key);
 	$uri = PHOTOAPI . implode("&",$params);
-	try{
+	//try{
 	$photo = file_get_contents($uri);
 
-	throw new Exception('Access error to google place photo',2);
-} catch (Exception $e){
-	error_log("Cannot get photo data");
-}
+// 	throw new Exception('Access error to google place photo',2);
+// } catch (Exception $e){
+// 	error_log("Cannot get photo data");
+// }
 	return $photo;
-}
+//}
 
 
 // private function _build($params,$baseUri){
