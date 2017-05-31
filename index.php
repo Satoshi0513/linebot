@@ -50,7 +50,7 @@ foreach ($events as $event) {
   foreach($json->results as $res) {
     $actionArray = array();
     //variables to get place photo
-    $ref = $res->photos[0];
+    $ref = $res->photos[0]->photo_reference;
     $width = $res->photos[0]->width;
     //get place photo data if exists
     if (isset($ref)&&isset($width)){
