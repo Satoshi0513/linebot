@@ -28,7 +28,7 @@ foreach ($events as $event) {
     error_log('Non message event has come');
     continue;
   }
-  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage ||$event $event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage)) {
+  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage ||$event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage)) {
     error_log('Non text message has come');
     continue;
   }
