@@ -43,6 +43,7 @@ foreach ($events as $event) {
     $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
   }
 
+error_log($json);
 
   $columnArray = array();
   $i = 0;
