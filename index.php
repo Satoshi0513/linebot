@@ -54,13 +54,15 @@ foreach ($events as $event) {
     $width = $res->photos[0]->width;
     error_log($ref . $width);
     //get place photo data if exists
-    if (isset($ref) && isset($width)){
+      try{
       $photo = $api->photoApi($ref,$width);
-    }else{
-      //if no photo, put cafe icon insteadly
+      Throw new Exception('Access error to google place photo',3);
+    }catch (Exception $e){
+      //if Google place photo API failed, put cafe icon insteadly
       $uri =$res->icon;
       $photo = file_get_contents($uri);
     }
+
 
     //prepare for creating carousel
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (

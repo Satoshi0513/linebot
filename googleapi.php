@@ -57,7 +57,7 @@ public function photoApi($reference,$maxwidth){
 	try{
 	$photo = file_get_contents($uri);
 
-	throw new Exception('Access error for google place photo',2);
+	throw new Exception('Access error to google place photo',2);
 } catch (Exception $e){
 	error_log("Cannot get photo data");
 }
