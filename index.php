@@ -28,7 +28,7 @@ foreach ($events as $event) {
     error_log('Non message event has come');
     continue;
   }
-  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage)) {
+  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage ||$event $event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage)) {
     error_log('Non text message has come');
     continue;
   }
@@ -52,7 +52,6 @@ foreach ($events as $event) {
     //variables to get place photo
     $ref = $res->photos[0]->photo_reference;
     $width = $res->photos[0]->width;
-    error_log($ref . $width);
     //get place photo data if exists
       try{
       $photo = $api->photoApi($ref,$width);
