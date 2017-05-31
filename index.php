@@ -52,8 +52,9 @@ foreach ($events as $event) {
     //variables to get place photo
     $ref = $res->photos[0]->photo_reference;
     $width = $res->photos[0]->width;
+    error_log($ref . $width);
     //get place photo data if exists
-    if (isset($ref)&&isset($width)){
+    if (isset($ref) && isset($width)){
       $photo = $api->photoApi($ref,$width);
     }else{
       //if no photo, put cafe icon insteadly
