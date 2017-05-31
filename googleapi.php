@@ -62,7 +62,7 @@ public function photoApi($reference,$maxwidth){
 // 	error_log("Cannot get photo data");
 // }
 	return $photo;
-//}
+}
 
 
 // private function _build($params,$baseUri){
