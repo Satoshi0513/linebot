@@ -40,9 +40,7 @@ foreach ($events as $event) {
     $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
   }
 
-if (isset($json)){
-  error_log("josn data".print_r($json,true));
-}
+
   $columnArray = array();
   $i = 0;
 
