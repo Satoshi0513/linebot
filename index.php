@@ -48,18 +48,19 @@ if (isset($json)){
 
   foreach($json->results as $res) {
     $actionArray = array();
+    $ref = "";
+    $width = 0;
     //variables to get place photo
-    $ref = $res->photos[0]->photo_reference;
-    $width = $res->photos[0]->width;
+    if(isset($res->photos)){
     //get place photo data if exists
-      try{
-      $photo = $api->photoApi($ref,$width);
-      Throw new Exception('Access error to google place photo',3);
-    }catch (Exception $e){
-      //if Google place photo API failed, put cafe icon insteadly
-      $uri =$res->icon;
-      $photo = file_get_contents($uri);
-    }
+  $ref = $res->photos[0]->photo_reference;
+  $width = $res->photos[0]->width;
+  $photo = $api->photoApi($ref,$width);
+}else {
+    //if Google place photo API failed, put cafe icon insteadly
+  $uri =$res->icon;
+  $photo = file_get_contents($uri);
+}
 
 
     //prepare for creating carousel
