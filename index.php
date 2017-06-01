@@ -45,6 +45,9 @@ foreach ($events as $event) {
   $i = 0;
 
   foreach($json->results as $res) {
+    if ($i > 2){
+      break;
+    }
     $actionArray = array();
     $ref = "";
     $width = 0;
