@@ -41,7 +41,7 @@ foreach ($events as $event) {
   }
 
 if (isset($json)){
-  error_log("josn data".$json);
+  error_log("josn data".var_dump($json));
 }
   $columnArray = array();
   $i = 0;
