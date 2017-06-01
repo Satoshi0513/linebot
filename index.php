@@ -60,6 +60,8 @@ foreach ($events as $event) {
   $photo = file_get_contents($uri);
 }
 
+generateImage($photo,$res->name);
+
     //prepare for creating carousel
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
       "Webサイト", "c-" . $i . "-" . 1));
@@ -70,7 +72,7 @@ foreach ($events as $event) {
     $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
       ($i + 1) . "番目に近いカフェ",
       $res->name,
-      $photo,
+      __DIR__ . '/imgs/'. $res->name . '.jpg',
       $actionArray
     );
     array_push($columnArray, $column);
@@ -161,6 +163,11 @@ function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray
   if (!$response->isSucceeded()) {
     error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
   }
+}
+
+function generateImage($data,$name){
+  $path = __DIR__ .'/imgs/' . $name .'.jpg';
+  file_put_contents($path,$data);
 }
 
  ?>
