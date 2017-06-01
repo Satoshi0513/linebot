@@ -61,11 +61,6 @@ if (isset($json)){
   $uri =$res->icon;
   $photo = file_get_contents($uri);
 }
-header('Content-type: image/jpeg');
-header('Content-type: image/png');
-header('Content-type: image/gif');
-header('Content-type: image/bmp');
-
 
     //prepare for creating carousel
     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
