@@ -169,8 +169,7 @@ function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray
 }
 
 function generateImage($data,$name){
-  $path = __DIR__ .'/imgs/' . $name .'.jpg';
-  file_put_contents($path,$data);
+  file_put_contents(__DIR__ . '/imgs/' . $name .'.jpg',$data);
 }
 
  ?>
