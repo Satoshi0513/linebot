@@ -33,55 +33,56 @@ foreach ($events as $event) {
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
     $json = $api->textApi($event->getText());
+    $bot->replyText($event->getReplyToken(), $event->getText());
   }
-//check if location message come
-  if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
-    $api = new Googleapi(getenv('GOOGLE_API_KEY'));
-    $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
-  }
-
-
-  $columnArray = array();
-  $i = 0;
-
-  foreach($json->results as $res) {
-    if ($i > 2){
-      break;
-    }
-    $actionArray = array();
-    $ref = "";
-    $width = 0;
-    //variables to get place photo
-    if(isset($res->photos)){
-    //get place photo data if exists
-  $ref = $res->photos[0]->photo_reference;
-  $width = $res->photos[0]->width;
-  $photo = $api->photoApi($ref,$width);
-}else {
-    //if Google place photo API failed, put cafe icon insteadly
-  $uri =$res->icon;
-  $photo = file_get_contents($uri);
-}
-
-generateImage($photo,$res->name);
-
-    //prepare for creating carousel
-    array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "Webサイト", "c-" . $i . "-" . 1));
-    array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "地図", "c-" . $i . "-" . 2));
-    array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-      "営業時間", "c-" . $i . "-" . 3));
-    $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-      ($i + 1) . "番目に近いカフェ",
-      $res->name,
-      __DIR__ . '/imgs/'. $res->name . '.jpg',
-      $actionArray
-    );
-    array_push($columnArray, $column);
-    $i += 1;
-  }
-  replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
+// //check if location message come
+//   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
+//     $api = new Googleapi(getenv('GOOGLE_API_KEY'));
+//     $json = $api->nearbyApi($event->getLatitude(),$event->getLongitude());
+//   }
+//
+//
+//   $columnArray = array();
+//   $i = 0;
+//
+//   foreach($json->results as $res) {
+//     if ($i > 2){
+//       break;
+//     }
+//     $actionArray = array();
+//     $ref = "";
+//     $width = 0;
+//     //variables to get place photo
+//     if(isset($res->photos)){
+//     //get place photo data if exists
+//   $ref = $res->photos[0]->photo_reference;
+//   $width = $res->photos[0]->width;
+//   $photo = $api->photoApi($ref,$width);
+// }else {
+//     //if Google place photo API failed, put cafe icon insteadly
+//   $uri =$res->icon;
+//   $photo = file_get_contents($uri);
+// }
+//
+// generateImage($photo,$res->name);
+//
+//     //prepare for creating carousel
+//     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+//       "Webサイト", "c-" . $i . "-" . 1));
+//     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+//       "地図", "c-" . $i . "-" . 2));
+//     array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+//       "営業時間", "c-" . $i . "-" . 3));
+//     $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
+//       ($i + 1) . "番目に近いカフェ",
+//       $res->name,
+//       __DIR__ . '/imgs/'. $res->name . '.jpg',
+//       $actionArray
+//     );
+//     array_push($columnArray, $column);
+//     $i += 1;
+//   }
+//   replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
 
 }
 
