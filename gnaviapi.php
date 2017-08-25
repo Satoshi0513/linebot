@@ -10,13 +10,13 @@ class Gnaviapi {
 public function restTextSearch($userText){
 	$userText = urlencode($userText);
 	$uri = RestSearchUri . "?keyid=" . $this->apikey . "&format=json&category_s=RSFST18001&freeword=" . $userText;
-	$json = _get($uri);
+	$json = $this->_get($uri);
 	return $json;
 }
 
 public function restLocationSearch($lat,$lon){
 	$uri = RestSearchUri . "?keyid=" . $this->apikey ."&format=json&category_s=RSFST18001&latitude=" . $lat . "&longitude=" . $lon ."&range=3";
-	$json = _get($uri);
+	$json = $this->_get($uri);
 	return $json;
 }
 
