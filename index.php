@@ -40,7 +40,7 @@ foreach ($events as $event) {
     $json = $api->restLocationSearch($event->getLatitude(),$event->getLongitude());
   }
 
-if (isset($json->rest)) {
+if (!isset($json->error)) {
 
   $columnArray = array();
     foreach ($json->rest as $rest){
@@ -66,7 +66,7 @@ if (isset($json->rest)) {
     }
     replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
   } else {
-    $bot->replyText($event->getReplyToken(), "1km圏内にカフェはないようです。");
+    $bot->replyText($event->getReplyToken(), "うまく探せませんでした。。。1km圏内にカフェはないかもしれません。");
   }
 
   // foreach($json->rest as $rest) {
