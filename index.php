@@ -66,7 +66,7 @@ if (isset($json->rest)) {
     }
     replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
   } else {
-    $bot->replyText($event->getReplyToken(),"1km圏内にカフェはないようです。";
+    $bot->replyText($event->getReplyToken(), "1km圏内にカフェはないようです。");
   }
 
   // foreach($json->rest as $rest) {
