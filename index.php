@@ -41,10 +41,6 @@ foreach ($events as $event) {
   }
 
 
-  //$columnArray = array();
-
-
-
   $columnArray = array();
     foreach ($json->rest as $rest){
       if ($i >4){
@@ -59,12 +55,13 @@ foreach ($events as $event) {
         "地図", $mapUri));
 
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-        ($i + 1) . "日後の天気",
+        ($i + 1) . "番目に近いカフェ",
         $rest->name,
         "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
         $actionArray
       );
       array_push($columnArray, $column);
+      $i += 1;
     }
     replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
 
