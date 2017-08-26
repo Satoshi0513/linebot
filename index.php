@@ -67,7 +67,6 @@ foreach ($events as $event) {
     }
     replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
 
-  }
   // foreach($json->rest as $rest) {
   //   if ($i > 2){
   //     break;
