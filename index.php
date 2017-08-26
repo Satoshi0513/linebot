@@ -47,7 +47,7 @@ foreach ($events as $event) {
     if ($i >1){
       break;
     }
-    $bot->replyText($event->getReplyToken(), $event->getText());
+    $bot->replyText($event->getReplyToken(), $rest->name);
     $i += 1;
   }
 
