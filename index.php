@@ -53,11 +53,11 @@ foreach ($events as $event) {
       $actionArray = array();
       $mapUri = "https://www.google.co.jp/maps/place/" . $rest->address;//generate URI for searching shop location on Google map //
 
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-        "Webサイト", $rest->url));
-        array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+        "webサイト", $rest->url));
+      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
         "地図", $mapUri));
-      
+
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
         ($i + 1) . "日後の天気",
         $rest->name,
