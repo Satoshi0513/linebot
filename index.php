@@ -51,21 +51,22 @@ foreach ($events as $event) {
         break;
       }
       $actionArray = array();
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        "ボタン" . $i . "-" . 1, "c-" . $i . "-" . 1));
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        "ボタン" . $i . "-" . 2, "c-" . $i . "-" . 2));
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        "ボタン" . $i . "-" . 3, "c-" . $i . "-" . 3));
+      $mapUri = "https://www.google.co.jp/maps/place/" . $rest->address;//generate URI for searching shop location on Google map //
+
+      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+        "Webサイト", $rest->url));
+        array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+        "地図", $mapUri));
+      
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
         ($i + 1) . "日後の天気",
         $rest->name,
-        "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/template.jpg",
+        "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
         $actionArray
       );
       array_push($columnArray, $column);
     }
-    replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
+    replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
 
   // foreach($json->rest as $rest) {
   //   if ($i > 2){
