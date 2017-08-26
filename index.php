@@ -41,41 +41,49 @@ foreach ($events as $event) {
   }
 
 
-  $columnArray = array();
+  //$columnArray = array();
   $i = 0;
-
-  foreach($json->rest as $rest) {
-    if ($i > 2){
+  foreach ($json->rest as $rest){
+    if ($i >1){
       break;
     }
-    $actionArray = array();
-    $mapUri = "https://www.google.co.jp/maps/place/" . $rest->address;//generate URI for searching shop location on Google map //
-    //　set shop image if exists;
-    if(isset($rest->image_url->shop_image1)) {
-      $photo = $rest->image_url->shop_image1;
-    } elseif(isset($rest->image_url->shop_image2)) {
-      $photo = $rest->image_url->shop_image2;
-    } else{
-      $photo = __DIR__ . "/imgs/cafe.jpg";
-    }
-
-    //prepare for creating carousel
-    array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-      "Webサイト", $rest->url));
-    array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-      "地図", $mapUri));
-    // array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-    //   "営業時間", "c-" . $i . "-" . 3));
-    $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-      ($i + 1) . "番目に近いカフェ",
-      $rest->name,
-      $photo,
-      $actionArray
-    );
-    array_push($columnArray, $column);
+    $bot->replyText($event->getReplyToken(), $event->getText());
     $i += 1;
   }
-  replyCarouselTemplate($bot, $event->getReplyToken(),"今後の天気予報", $columnArray);
+
+
+  // foreach($json->rest as $rest) {
+  //   if ($i > 2){
+  //     break;
+  //   }
+  //   $actionArray = array();
+  //   $mapUri = "https://www.google.co.jp/maps/place/" . $rest->address;//generate URI for searching shop location on Google map //
+  //   //　set shop image if exists;
+  //   if(isset($rest->image_url->shop_image1)) {
+  //     $photo = $rest->image_url->shop_image1;
+  //   } elseif(isset($rest->image_url->shop_image2)) {
+  //     $photo = $rest->image_url->shop_image2;
+  //   } else{
+  //     $photo = __DIR__ . "/imgs/cafe.jpg";
+  //   }
+  //
+  //   //prepare for creating carousel
+  //   array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+  //     "Webサイト", $rest->url));
+  //   array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+  //     "地図", $mapUri));
+  //   // array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+  //   //   "営業時間", "c-" . $i . "-" . 3));
+  //   $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
+  //     ($i + 1) . "番目に近いカフェ",
+  //     $rest->name,
+  //     $photo,
+  //     $actionArray
+  //   );
+  //   array_push($columnArray, $column);
+  //   $i += 1;
+  // }
+  // replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
 
 }
 
