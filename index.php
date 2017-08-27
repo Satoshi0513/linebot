@@ -41,7 +41,7 @@ foreach ($events as $event) {
   }
 
  if (isset($json->rest)) {
-      $bot->replyText($event->getReplyToken(), $json->rest);
+      $bot->replyText($event->getReplyToken(), $json->rest->name);
   // $columnArray = array();
   //
   //   foreach ($json->rest as $rest) {
