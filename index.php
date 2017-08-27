@@ -42,38 +42,33 @@ foreach ($events as $event) {
 
  if (isset($json->rest)) {
 
-   $bot->replyText($event->getReplyToken(), "緯度：" . $event->getLatitude() ."経度：" . $event->getLongitude());
- }else{
-  $bot->replyText($event->getReplyToken(), "近くにカフェはありません");
- }
-//
-//   $columnArray = array();
-//
-//     foreach ($json->rest as $rest){
-//       if ($i >4){
-//         break;
-//       }
-//       $actionArray = array();
-//       $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
-//
-//       array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-//         "Webサイト", $rest->url));
-//         array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-//         "地図", $mapUri));
-//
-//       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-//         ($i + 1) . "番目に近いカフェ",
-//         $rest->name,
-//         "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
-//         $actionArray
-//       );
-//       array_push($columnArray, $column);
-//       $i += 1;
-//     }
-//     replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
-//   } else {
-//     $bot->replyText($event->getReplyToken(), "うまく探せませんでした。。。1km圏内にカフェはないかもしれません。");
-//   }
+  $columnArray = array();
+
+    foreach ($json->rest as $rest) {
+      if ($i >4){
+        break;
+      }
+      $actionArray = array();
+      $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
+
+      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+        "Webサイト", $rest->url));
+        array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+        "地図", $mapUri));
+
+      $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
+        ($i + 1) . "番目に近いカフェ",
+        $rest->name,
+        "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
+        $actionArray
+      );
+      array_push($columnArray, $column);
+      $i += 1;
+    }
+    replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
+  }else{
+    $bot->replyText($event->getReplyToken(), "うまく探せませんでした。。。1km圏内にカフェはないかもしれません。");
+  }
 
   // foreach($json->rest as $rest) {
   //   if ($i > 2){
