@@ -37,37 +37,40 @@ foreach ($events as $event) {
 //check if location message come
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
     $api = new Gnaviapi(getenv('GNAVI_API_KEY'));
+    $bot->replyText($event->getReplyToken(), "緯度：" . $event->getLatitude ."経度：" . $event->getLongitude);
     $json = $api->restLocationSearch($event->getLatitude(),$event->getLongitude());
   }
 
-if (isset($json->rest)) {
 
-  $columnArray = array();
-    foreach ($json->rest as $rest){
-      if ($i >4){
-        break;
-      }
-      $actionArray = array();
-      $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
-
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-        "Webサイト", $rest->url));
-        array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-        "地図", $mapUri));
-
-      $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-        ($i + 1) . "番目に近いカフェ",
-        $rest->name,
-        "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
-        $actionArray
-      );
-      array_push($columnArray, $column);
-      $i += 1;
-    }
-    replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
-  } else {
-    $bot->replyText($event->getReplyToken(), "うまく探せませんでした。。。1km圏内にカフェはないかもしれません。");
-  }
+// if (isset($json->rest)) {
+//
+//   $columnArray = array();
+//
+//     foreach ($json->rest as $rest){
+//       if ($i >4){
+//         break;
+//       }
+//       $actionArray = array();
+//       $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
+//
+//       array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+//         "Webサイト", $rest->url));
+//         array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+//         "地図", $mapUri));
+//
+//       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
+//         ($i + 1) . "番目に近いカフェ",
+//         $rest->name,
+//         "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
+//         $actionArray
+//       );
+//       array_push($columnArray, $column);
+//       $i += 1;
+//     }
+//     replyCarouselTemplate($bot, $event->getReplyToken(),"近くのカフェ", $columnArray);
+//   } else {
+//     $bot->replyText($event->getReplyToken(), "うまく探せませんでした。。。1km圏内にカフェはないかもしれません。");
+//   }
 
   // foreach($json->rest as $rest) {
   //   if ($i > 2){
