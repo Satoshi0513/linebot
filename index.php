@@ -37,7 +37,7 @@ foreach ($events as $event) {
 //check if location message come
   if ($event instanceof \LINE\LINEBot\Event\MessageEvent\LocationMessage) {
     $api = new Gnaviapi(getenv('GNAVI_API_KEY'));
-    $bot->replyText($event->getReplyToken(), "緯度：" . $event->getLatitude ."経度：" . $event->getLongitude);
+    $bot->replyText($event->getReplyToken(), "緯度：" . $event->getLatitude() ."経度：" . $event->getLongitude());
     $json = $api->restLocationSearch($event->getLatitude(),$event->getLongitude());
   }
 
