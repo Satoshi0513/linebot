@@ -40,7 +40,7 @@ foreach ($events as $event) {
     $json = $api->restLocationSearch($event->getLatitude(),$event->getLongitude());
   }
 
-if (!isset($json->error)) {
+if (isset($json->rest)) {
 
   $columnArray = array();
     foreach ($json->rest as $rest){
