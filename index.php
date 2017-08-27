@@ -49,6 +49,16 @@ foreach ($events as $event) {
         break;
       }
       $actionArray = array();
+
+      //　set shop image if exists;
+        if(isset($rest->image_url->shop_image1)) {
+          $photo = $rest->image_url->shop_image1;
+        } elseif(isset($rest->image_url->shop_image2)) {
+          $photo = $rest->image_url->shop_image2;
+        } else{
+          $photo = "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg";
+        }
+
       $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
 
       array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
@@ -59,7 +69,7 @@ foreach ($events as $event) {
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
         ($i + 1) . "番目に近いカフェ",
         $rest->name,
-        "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg",
+        $photo,
         $actionArray
       );
       array_push($columnArray, $column);
