@@ -225,8 +225,6 @@ function saveImage($url,$name){
 
 function deleteData($path) {
     unlink($path);
-  }
-
 }
 
  ?>
