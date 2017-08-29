@@ -216,7 +216,7 @@ function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray
 }
 
 function saveImage($url,$name){
-  $url = urlencode($url);
+  error_log(print_r($url));
   $data = file_get_contents($url);
   $path =  __DIR__ . "/shop-imgs/" . $name . ".jpg";
   file_put_contents($path,$data);
