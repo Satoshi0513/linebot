@@ -62,11 +62,11 @@ foreach ($events as $event) {
         $file = $buffer->get($key);
         $path =  __DIR__ . "/shop-imgs/" . $file;
       }elseif(isset($rest->image_url->shop_image1)) {
-        $deleteFile = saveImage($rest->image_url->shop_image1, $rest->id );
-        $buffer->append($rest->id . "jpg");
+        saveImage($rest->image_url->shop_image1, $rest->id );
+        $deleteFile = $buffer->append($rest->id . "jpg");
       } elseif(isset($rest->image_url->shop_image2)) {
-        $deleteFile = saveImage($rest->image_url->shop_image2, $rest->id );
-        $buffer->append($rest->id . "jpg");
+        saveImage($rest->image_url->shop_image2, $rest->id );
+        $deleteFile = $buffer->append($rest->id . "jpg");
       } else{
         $path =  __DIR__ . "/imgs/cafe.jpg";
       }
@@ -216,11 +216,9 @@ function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray
 }
 
 function saveImage($url,$name){
-  $path = "";
   $data = file_get_contents($url);
-  file_put_contents(__DIR__ . '/shop-imgs/' . $name .'.jpg',$data);
   $path =  __DIR__ . '/shop-imgs/' . $name .'.jpg';
-  return $path;
+  file_put_contents($path,$data);
 }
 
 function deleteData($path) {
