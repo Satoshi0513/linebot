@@ -60,19 +60,19 @@ foreach ($events as $event) {
 
       if ($key) {
         $file = $buffer->get($key);
-        $path = "https://" . $_SERVER["HTTP_HOST"] .  "/shop-imgs/" . $file;
+        $path =  __DIR__ . "/shop-imgs/" . $file;
       }elseif(isset($rest->image_url->shop_image1)) {
-        $deleteFile = saveImage(urlencode($rest->image_url->shop_image1), $rest->id );
+        $deleteFile = saveImage($rest->image_url->shop_image1, $rest->id );
         $buffer->append($rest->id . "jpg");
       } elseif(isset($rest->image_url->shop_image2)) {
-        $deleteFile = saveImage(urlencode($rest->image_url->shop_image2), $rest->id );
+        $deleteFile = saveImage($rest->image_url->shop_image2, $rest->id );
         $buffer->append($rest->id . "jpg");
       } else{
-        $path = "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg";
+        $path =  __DIR__ . "/imgs/cafe.jpg";
       }
       //delete file if  nuber of file　is over buffer size
       if ($deleteFile) {
-      $deletePath = "https://" . $_SERVER["HTTP_HOST"] .  "/shop-imgs/" . $deleteFile;
+      $deletePath =  __DIR__ . '/shop-imgs/' . $deleteFile;
         deleteData($deletePath);
       }
 
