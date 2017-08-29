@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/gnaviapi.php';
+require_once __DIR__ . '/ring-buffer.php';
 
+
+$buffer = new RingBuffer(30);
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
 
@@ -40,8 +43,9 @@ foreach ($events as $event) {
     $json = $api->restLocationSearch($event->getLatitude(),$event->getLongitude());
   }
 
+
+
  if (isset($json->rest)) {
-  // $bot->replyText($event->getReplyToken(), "緯度：" . $event->getLatitude() ."経度：" . $event->getLongitude());
   $columnArray = array();
 
     foreach ($json->rest as $rest) {
@@ -51,13 +55,26 @@ foreach ($events as $event) {
       $actionArray = array();
 
       //　set shop image if exists;
-        if(isset($rest->image_url->shop_image1)) {
-          $photo = $rest->image_url->shop_image1;
-        } elseif(isset($rest->image_url->shop_image2)) {
-          $photo = $rest->image_url->shop_image2;
-        } else{
-          $photo = "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg";
-        }
+      $key = FALSE;
+      $key = $buffer->search($rest->id . ".jpg"); //search file in buffer
+
+      if ($key) {
+        $file = $buffer->get($key);
+        $path = "https://" . $_SERVER["HTTP_HOST"] .  "/shop-imgs/" . $file;
+      }elseif(isset($rest->image_url->shop_image1)) {
+        $deleteFile = saveImage($rest->image_url->shop_image1, $rest->id );
+        $buffer->append($rest->id . "jpg");
+      } elseif(isset($rest->image_url->shop_image2)) {
+        $deleteFile = saveImage($rest->image_url->shop_image2, $rest->id );
+        $buffer->append($rest->id . "jpg");
+      } else{
+        $path = "https://" . $_SERVER["HTTP_HOST"] .  "/imgs/cafe.jpg";
+      }
+      //delete file if  nuber of file　is over buffer size
+      if ($deleteFile) {
+      $deletePath = "https://" . $_SERVER["HTTP_HOST"] .  "/shop-imgs/" . $deleteFile;
+        deleteData($deletePath);
+      }
 
       $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
 
@@ -69,7 +86,7 @@ foreach ($events as $event) {
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
         ($i + 1) . "番目に近いカフェ",
         $rest->name,
-        $photo,
+        $path,
         $actionArray
       );
       array_push($columnArray, $column);
@@ -198,8 +215,18 @@ function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray
   }
 }
 
-function generateImage($data,$name){
-  file_put_contents(__DIR__ . '/imgs/' . $name .'.jpg',$data);
+function saveImage($url,$name){
+  $path = "";
+  $data = file_get_contents($url);
+  file_put_contents(__DIR__ . '/shop-imgs/' . $name .'.jpg',$data);
+  $path =  __DIR__ . '/shop-imgs/' . $name .'.jpg';
+  return $path;
+}
+
+function deleteData($path) {
+    unlink($path);
+  }
+
 }
 
  ?>
