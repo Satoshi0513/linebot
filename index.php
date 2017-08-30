@@ -45,10 +45,10 @@ foreach ($events as $event) {
 
 
 
- if (isset($json->rest)) {
+ if (isset($json['rest'])) {
   $columnArray = array();
 
-    foreach ($json->rest as $rest) {
+    foreach ($json['rest'] as $rest) {
       if ($i >4){
         break;
       }
@@ -56,17 +56,17 @@ foreach ($events as $event) {
 
       //　set shop image if exists;
       $key = FALSE;
-      $key = $buffer->search($rest->id . ".jpg"); //search file in buffer
+      $key = $buffer->search($rest['id'] . ".jpg"); //search file in buffer
 
       if ($key) {
         $file = $buffer->get($key);
         $path =  __DIR__ . "/shop-imgs/" . $file;
-      }elseif(isset($rest->image_url->shop_image1)) {
-        saveImage($rest->image_url->shop_image1, $rest->id );
-        $deleteFile = $buffer->append($rest->id . "jpg");
-      } elseif(isset($rest->image_url->shop_image2)) {
-        saveImage($rest->image_url->shop_image2, $rest->id );
-        $deleteFile = $buffer->append($rest->id . "jpg");
+      }elseif(isset($rest['image_url']['shop_image1'])) {
+        saveImage($rest['image_url']['shop_image1'], $rest['id'] );
+        $deleteFile = $buffer->append($rest['id'] . "jpg");
+      } elseif(isset($rest['image_url']['shop_image2'])) {
+        saveImage($rest['image_url']['shop_image2'], $rest['id'] );
+        $deleteFile = $buffer->append($rest['id'] . "jpg");
       } else{
         $path =  __DIR__ . "/imgs/cafe.jpg";
       }
@@ -76,16 +76,16 @@ foreach ($events as $event) {
         deleteData($deletePath);
       }
 
-      $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest->address);//generate URI for searching shop location on Google map //
+      $mapUri = "https://www.google.co.jp/maps/place/" . urlencode($rest['address']);//generate URI for searching shop location on Google map //
 
       array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
-        "Webサイト", $rest->url));
+        "Webサイト", $rest['url']));
         array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
         "地図", $mapUri));
 
       $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
         ($i + 1) . "番目に近いカフェ",
-        $rest->name,
+        $rest['name'],
         $path,
         $actionArray
       );

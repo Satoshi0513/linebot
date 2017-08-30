@@ -63,7 +63,7 @@ private function _get($uri) {
 			}
 
 			//Transform to JSON object
-			$ret = json_decode($json);
+			$ret = json_decode($json,true);
 
 			//Check API Request if failed
 			if(isset($json->error_message)) {
